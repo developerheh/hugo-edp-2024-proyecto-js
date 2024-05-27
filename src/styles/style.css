@@ -129,11 +129,11 @@ footer ul li{
     background-color: #2f2f2f;
     border-radius: 8px;
     color: antiquewhite;
-    padding: 8px;
+    padding: 4px;
     transition: ease all 300ms;
 }
 
 .btn-nav:hover{
     cursor: pointer;
-    box-shadow: 6px 6px aqua;
+    box-shadow: 4px 4px rgb(195, 0, 255);
 }

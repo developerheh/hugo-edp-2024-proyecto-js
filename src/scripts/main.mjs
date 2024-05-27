@@ -1,5 +1,23 @@
 import { getAllRecipes } from "./receipes/getRecipes.mjs";
 import { getRecipesByTag } from "./receipes/getByTag.mjs";
+import { getAllUsers } from "./Users/getAllUsers.mjs";
+import { addUser } from "./Users/addUser.mjs";
+import { logInUser } from "./Users/login.mjs";
+import { stateLogin } from "./Users/stateLogin.mjs";
+
+
+getAllUsers();
+stateLogin();
+
+// export let loginState = {
+// username: "",
+// firstName: "",
+// lastName: "",
+// image: ""
+// }
+
+
+let isLoged = JSON.parse(localStorage.getItem('stateLoginTM'));
 
 const $ = selector => document.querySelector(selector)
 
@@ -18,6 +36,31 @@ const $btnShowUsersNav = $('#show-users')
 const $btnShowPostsNav = $('#show-posts')
 const $btnCerrarSesion = $('#cerrar-sesion')
 
+// ___________FORM REGISTRO__________________
+
+const $regName = $('#reg-name');
+const $regSurname = $('#reg-surname');
+const $regAge = $('#reg-age');
+const $regUserName = $('#reg-username');
+const $regPassword = $('#reg-password');
+
+// ___________FORM INICIO (Loggin)____________
+
+const $logInUsername = $('#login-username');
+const $logInPassword = $('#login-password');
+
+// ___________Show home_______________________
+const showHome = () => {
+    //agrego el home
+    document.querySelector('#home').innerHTML = `
+     <img src=${isLoged.user.image} alt=${isLoged.username}>
+             <h1>Welcome ${isLoged.user.firstName} ${isLoged.user.lastName}</h1>
+     `
+    document.querySelector('#home').classList.remove('ocultar');
+}
+
+// ___________Eventos_________________________
+
 $registrarse.addEventListener('click', () => {
     $formInicio.classList.add('ocultar')
     $formRegistro.classList.remove('ocultar')
@@ -26,10 +69,11 @@ $registrarse.addEventListener('click', () => {
 $iniciarSesion.addEventListener('click', () => {
     $formInicio.classList.remove('ocultar')
     $formRegistro.classList.add('ocultar')
-}) 
+})
 
 $btnShowRecetas.addEventListener('click', () => {
-    getAllRecipes()
+    getAllRecipes();
+    $recipes.classList.remove('ocultar'); //Habilita mostrar las "cards" de resetas en pantalla
 })
 
 $selectTag.addEventListener('change', (e) => {
@@ -38,6 +82,7 @@ $selectTag.addEventListener('change', (e) => {
 
 $btnFormRegistro.addEventListener('click', (e) => {
     e.preventDefault();
+    addUser($regName.value, $regSurname.value, $regAge.value, $regUserName.value, $regPassword.value);
 
     alert('Registro hecho')
     $formInicio.classList.remove('ocultar')
@@ -46,16 +91,52 @@ $btnFormRegistro.addEventListener('click', (e) => {
 
 $btnFormInicioSesion.addEventListener('click', (e) => {
     e.preventDefault()
-    alert('Inibio hecho')
-    $iniciarSesion.classList.add('ocultar')
-    $registrarse.classList.add('ocultar')
-    $formInicio.classList.add('ocultar')
-    $home.classList.remove('ocultar')
 
-    $btnCerrarSesion.classList.remove('ocultar')
-    $btnShowPostsNav.classList.remove('ocultar')
-    $btnShowProductNav.classList.remove('ocultar')
-    $btnShowRecetas.classList.remove('ocultar')
-    $btnShowUsersNav.classList.remove('ocultar')
+    const resLogin = logInUser($logInUsername.value, $logInPassword.value);
+
+    if (resLogin) {
+        showHome();
+        $iniciarSesion.classList.add('ocultar')
+        $registrarse.classList.add('ocultar')
+        $formInicio.classList.add('ocultar')
+        $home.classList.remove('ocultar')
+
+        $btnCerrarSesion.classList.remove('ocultar')
+        $btnShowPostsNav.classList.remove('ocultar')
+        $btnShowProductNav.classList.remove('ocultar')
+        $btnShowRecetas.classList.remove('ocultar')
+        $btnShowUsersNav.classList.remove('ocultar')
+
+        $logInUsername.value = "";
+        $logInPassword.value = "";
+    } else {
+        alert("Contraseña o Usuario inválido");
+    }
 
 })
+
+$btnCerrarSesion.addEventListener('click', () => {
+    handleStateLogin();
+    $iniciarSesion.classList.remove('ocultar')
+    $registrarse.classList.remove('ocultar')
+    $formInicio.classList.remove('ocultar')
+    $home.classList.add('ocultar')
+
+    $btnCerrarSesion.classList.add('ocultar')
+    $btnShowPostsNav.classList.add('ocultar')
+    $btnShowProductNav.classList.add('ocultar')
+    $btnShowRecetas.classList.add('ocultar')
+    $btnShowUsersNav.classList.add('ocultar')
+})
+
+export function handleStateLogin(state = false, username = "", firstName = "", lastName = "", image = "") {
+
+    isLoged.state = state;
+    isLoged.user.username = username;
+    isLoged.user.firstName = firstName;
+    isLoged.user.lastName = lastName;
+    isLoged.user.image = image;
+
+    localStorage.setItem('stateLoginTM', JSON.stringify(isLoged));
+
+}
