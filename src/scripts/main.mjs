@@ -9,13 +9,6 @@ import { stateLogin } from "./Users/stateLogin.mjs";
 getAllUsers();
 stateLogin();
 
-// export let loginState = {
-// username: "",
-// firstName: "",
-// lastName: "",
-// image: ""
-// }
-
 
 let isLoged = JSON.parse(localStorage.getItem('stateLoginTM'));
 
