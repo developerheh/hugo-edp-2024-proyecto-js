@@ -51,7 +51,11 @@ const showHome = () => {
      `
     document.querySelector('#home').classList.remove('ocultar');
 }
-
+const showPersonal = () => {
+    document.querySelector('#home').innerHTML = `
+     `
+    document.querySelector('#home').classList.remove('ocultar');
+}
 // ___________Eventos_________________________
 
 $registrarse.addEventListener('click', () => {
@@ -67,6 +71,7 @@ $iniciarSesion.addEventListener('click', () => {
 $btnShowRecetas.addEventListener('click', () => {
     getAllRecipes();
     $recipes.classList.remove('ocultar'); //Habilita mostrar las "cards" de resetas en pantalla
+    showPersonal();
 })
 
 $selectTag.addEventListener('change', (e) => {

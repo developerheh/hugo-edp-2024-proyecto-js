@@ -33,7 +33,7 @@ export const getAllRecipes = async () => {
 
 
     try {
-        const res = await fetch('https://dummyjson.com/recipes?limit=0')
+        const res = await fetch('https://dummyjson.com/recipes?limit=20')
         const { recipes } = await res.json()
 
         recipes.forEach(recipe => {
